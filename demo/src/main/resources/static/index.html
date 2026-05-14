@@ -1,145 +1,366 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedFlag.ai</title>
 
     <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: white;
-            overflow-x: hidden;
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
         }
 
-        /* 🔥 Liquid Glow Background */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255,0,0,0.4), transparent);
-            filter: blur(120px);
-            top: -100px;
-            left: -100px;
+        body{
+            font-family:'Segoe UI',sans-serif;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:#050816;
+            overflow:hidden;
+            color:white;
+            position:relative;
         }
 
-        body::after {
-            content: "";
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0,255,255,0.3), transparent);
-            filter: blur(120px);
-            bottom: -100px;
-            right: -100px;
+        /* BACKGROUND GLOW EFFECTS */
+
+        body::before{
+            content:"";
+            position:absolute;
+            width:500px;
+            height:500px;
+            background:rgba(255,0,80,0.25);
+            filter:blur(140px);
+            top:-120px;
+            left:-120px;
+            border-radius:50%;
         }
 
-        h1 {
-            margin-top: 40px;
-            font-size: 40px;
-            text-align: center;
+        body::after{
+            content:"";
+            position:absolute;
+            width:500px;
+            height:500px;
+            background:rgba(0,200,255,0.18);
+            filter:blur(140px);
+            bottom:-150px;
+            right:-120px;
+            border-radius:50%;
         }
 
-        .container {
-            margin: 40px auto;
-            width: 60%;
-            padding: 30px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        .main-container{
+            width:90%;
+            max-width:950px;
+            padding:40px;
+            border-radius:28px;
+
+            background:rgba(255,255,255,0.05);
+            backdrop-filter:blur(18px);
+
+            border:1px solid rgba(255,255,255,0.08);
+
+            box-shadow:
+                    0 0 50px rgba(0,0,0,0.5),
+                    inset 0 0 1px rgba(255,255,255,0.1);
+
+            position:relative;
+            z-index:5;
         }
 
-        textarea {
-            width: 100%;
-            height: 120px;
-            padding: 15px;
-            border-radius: 15px;
-            border: none;
-            font-size: 16px;
-            outline: none;
+        .title{
+            text-align:center;
+            margin-bottom:35px;
         }
 
-        button {
-            margin-top: 15px;
-            padding: 12px 25px;
-            border-radius: 15px;
-            border: none;
-            background: linear-gradient(45deg, red, orange);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
+        .title h1{
+            font-size:52px;
+            font-weight:700;
+            letter-spacing:1px;
         }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px red;
+        .title span{
+            color:#ff3c6f;
         }
 
-        .card {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 15px;
-            background: rgba(255,255,255,0.08);
+        .subtitle{
+            margin-top:8px;
+            color:#94a3b8;
+            font-size:15px;
         }
 
-        .high { color: #ff4d4d; }
-        .mid { color: #ffcc00; }
-        .low { color: #4dff88; }
-
-        .loader {
-            margin-top: 20px;
-            display: none;
+        .input-box{
+            margin-top:20px;
         }
+
+        textarea{
+            width:100%;
+            height:180px;
+            padding:22px;
+
+            border:none;
+            outline:none;
+            resize:none;
+
+            border-radius:22px;
+
+            background:rgba(255,255,255,0.08);
+
+            color:white;
+            font-size:16px;
+            line-height:1.6;
+
+            border:1px solid rgba(255,255,255,0.06);
+
+            transition:0.3s;
+        }
+
+        textarea:focus{
+            border:1px solid rgba(255,0,80,0.5);
+            box-shadow:0 0 25px rgba(255,0,80,0.2);
+        }
+
+        textarea::placeholder{
+            color:#94a3b8;
+        }
+
+        .btn{
+            margin-top:22px;
+            display:flex;
+            justify-content:center;
+        }
+
+        button{
+            padding:14px 38px;
+            border:none;
+            border-radius:16px;
+
+            background:linear-gradient(135deg,#ff0055,#ff7b00);
+
+            color:white;
+            font-size:16px;
+            font-weight:600;
+
+            cursor:pointer;
+
+            transition:0.3s ease;
+        }
+
+        button:hover{
+            transform:translateY(-2px) scale(1.03);
+
+            box-shadow:
+                    0 0 25px rgba(255,0,80,0.45);
+        }
+
+        .loader{
+            margin-top:25px;
+            text-align:center;
+            color:#cbd5e1;
+            display:none;
+        }
+
+        .result-card{
+            margin-top:30px;
+            padding:28px;
+
+            border-radius:24px;
+
+            background:rgba(255,255,255,0.06);
+
+            border:1px solid rgba(255,255,255,0.06);
+
+            display:none;
+        }
+
+        .risk-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            gap:10px;
+        }
+
+        .risk-title{
+            font-size:34px;
+            font-weight:700;
+        }
+
+        .risk-score{
+            padding:10px 18px;
+            border-radius:14px;
+            font-weight:700;
+            font-size:18px;
+        }
+
+        .high{
+            color:#ff4d6d;
+            background:rgba(255,77,109,0.12);
+        }
+
+        .mid{
+            color:#ffd166;
+            background:rgba(255,209,102,0.12);
+        }
+
+        .low{
+            color:#06d6a0;
+            background:rgba(6,214,160,0.12);
+        }
+
+        .section{
+            margin-top:28px;
+        }
+
+        .section h3{
+            margin-bottom:10px;
+            color:#f8fafc;
+            font-size:20px;
+        }
+
+        .section p{
+            color:#cbd5e1;
+            line-height:1.7;
+        }
+
+        .flags{
+            margin-top:10px;
+        }
+
+        .flag{
+            margin-top:10px;
+            padding:12px 15px;
+
+            border-radius:14px;
+
+            background:rgba(255,255,255,0.05);
+
+            color:#f1f5f9;
+        }
+
+        @media(max-width:768px){
+
+            .main-container{
+                width:95%;
+                padding:25px;
+            }
+
+            .title h1{
+                font-size:38px;
+            }
+
+            .risk-title{
+                font-size:28px;
+            }
+
+        }
+
     </style>
 </head>
 
 <body>
 
-<h1>🚨 RedFlag.ai</h1>
+<div class="main-container">
 
-<div class="container">
-    <textarea id="msg" placeholder="Paste suspicious message..."></textarea><br>
-    <button onclick="analyze()">Analyze</button>
+    <div class="title">
+        <h1>🚨 RedFlag<span>.ai</span></h1>
+        <p class="subtitle">
+            AI-Powered Scam & Phishing Detection System
+        </p>
+    </div>
 
-    <div class="loader" id="loader">🔍 Analyzing...</div>
+    <div class="input-box">
+        <textarea
+                id="msg"
+                placeholder="Paste suspicious message, email, SMS or phishing content here..."
+        ></textarea>
+    </div>
 
-    <div class="card" id="result"></div>
+    <div class="btn">
+        <button onclick="analyze()">
+            Analyze Threat
+        </button>
+    </div>
+
+    <div class="loader" id="loader">
+        🔍 AI Engine Scanning Message...
+    </div>
+
+    <div class="result-card" id="result"></div>
+
 </div>
 
 <script>
-    async function analyze() {
+
+    async function analyze(){
 
         let message = document.getElementById("msg").value;
+
         let loader = document.getElementById("loader");
         let result = document.getElementById("result");
 
         loader.style.display = "block";
-        result.innerHTML = "";
+        result.style.display = "none";
 
-        let res = await fetch("/api/analyze", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({message})
+        let res = await fetch("/api/analyze",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({message})
+
         });
 
         let data = await res.json();
 
         loader.style.display = "none";
+        result.style.display = "block";
 
         let color = data.riskScore > 60 ? "high" :
                     data.riskScore > 30 ? "mid" : "low";
 
         result.innerHTML = `
-            <h2 class="${color}">${data.verdict} (${data.riskScore}%)</h2>
 
-            <p><b>🧠 AI Analysis:</b><br>${data.aiExplanation}</p>
+            <div class="risk-header">
 
-            <p><b>🚩 Red Flags:</b><br>${data.flags.join("<br>")}</p>
+                <div class="risk-title ${color}">
+                    ${data.verdict}
+                </div>
+
+                <div class="risk-score ${color}">
+                    Risk Score: ${data.riskScore}%
+                </div>
+
+            </div>
+
+            <div class="section">
+                <h3>🧠 AI Analysis</h3>
+
+                <p>
+                    ${data.aiExplanation}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>🚩 Detected Red Flags</h3>
+
+                <div class="flags">
+
+                    ${data.flags.map(flag =>
+                        `<div class="flag">${flag}</div>`
+                    ).join("")}
+
+                </div>
+            </div>
+
         `;
     }
+
 </script>
 
 </body>
