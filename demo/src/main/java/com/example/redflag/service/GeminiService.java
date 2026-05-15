@@ -15,18 +15,16 @@ public class GeminiService {
     public String analyzeMessage(String message) {
 
         String prompt = """
-                Analyze the following message for phishing, scam, or suspicious activity.
+        Analyze this message for scam/phishing risk.
 
-                Return:
-                1. Risk Score
-                2. Verdict
-                3. Detailed Explanation
-                4. Detected Red Flags
+        Give:
+        1. Threat Summary
+        2. Why it is suspicious
+        3. Risk level
+        4. User safety advice
 
-                Keep the response concise and professional.
-
-                Message:
-                """ + message;
+        Message:
+        """ + message;
 
         Map<String, Object> requestBody = Map.of(
                 "contents", new Object[]{
@@ -56,14 +54,13 @@ public class GeminiService {
         } catch (Exception e) {
 
             return """
-                    
-AI-based contextual analysis is temporarily unavailable due to API rate limits.
+            AI-based contextual analysis is temporarily unavailable due to API rate limits.
 
-However, the system detected multiple suspicious indicators such as urgency tactics,
-financial references, suspicious links, and verification requests.
+            However, the system detected multiple suspicious indicators such as urgency tactics,
+            financial references, suspicious links, and verification requests.
 
-Users are strongly advised to avoid interacting with this message or sharing sensitive information.
-""";
+            Users are strongly advised to avoid interacting with this message or sharing sensitive information.
+            """;
         }
     }
 }
