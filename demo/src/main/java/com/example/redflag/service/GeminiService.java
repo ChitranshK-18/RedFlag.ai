@@ -1,14 +1,16 @@
 package com.example.redflag.service;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class GeminiService {
 
-    private final String API_KEY = "AIzaSyC6EnYMBD3-Tl9JKAj1ZUc-wFjUO6Zrl3M";
+    private final String API_KEY = "AIzaSyCj71yqhCjZMAnr51aRi3TNAsr4VLnEJWg";
 
     private final WebClient webClient = WebClient.create();
 
@@ -22,6 +24,8 @@ public class GeminiService {
         2. Why it is suspicious
         3. Risk level
         4. User safety advice
+
+        Keep the response concise and professional.
 
         Message:
         """ + message;
@@ -37,30 +41,39 @@ public class GeminiService {
         );
 
         String url =
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="
                         + API_KEY;
 
         try {
 
-            String response = webClient.post()
+            Map response = webClient.post()
                     .uri(url)
+                    .contentType(MediaType.APPLICATION_JSON)  // ✅ This was missing
                     .bodyValue(requestBody)
                     .retrieve()
-                    .bodyToMono(String.class)
+                    .bodyToMono(Map.class)
                     .block();
 
-            return response;
+            List<Map<String, Object>> candidates =
+                    (List<Map<String, Object>>) response.get("candidates");
+
+            if (candidates != null && !candidates.isEmpty()) {
+
+                Map<String, Object> content =
+                        (Map<String, Object>) candidates.get(0).get("content");
+
+                List<Map<String, Object>> parts =
+                        (List<Map<String, Object>>) content.get("parts");
+
+                return parts.get(0).get("text").toString();
+            }
+
+            return "AI could not analyze the message.";
 
         } catch (Exception e) {
 
-            return """
-            AI-based contextual analysis is temporarily unavailable due to API rate limits.
-
-            However, the system detected multiple suspicious indicators such as urgency tactics,
-            financial references, suspicious links, and verification requests.
-
-            Users are strongly advised to avoid interacting with this message or sharing sensitive information.
-            """;
+            e.printStackTrace();
+            return "AI could not analyze the message. Error: " + e.getMessage();  // ✅ Show actual error
         }
     }
 }
